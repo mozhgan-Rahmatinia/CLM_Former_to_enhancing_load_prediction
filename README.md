@@ -79,7 +79,7 @@ Data Preparation
 The primary dataset used is the ElectricityLoadDiagrams20112014 from the UCI Machine Learning Repository.
 
 Download the dataset.
-Place it in the ./dataset/ directory.
+Place it in the ./data/electricity/ directory.
 The code automatically handles Z-score normalization and 70/10/20 train/val/test splitting.
 
 
