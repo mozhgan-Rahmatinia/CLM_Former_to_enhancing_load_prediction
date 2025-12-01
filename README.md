@@ -35,7 +35,12 @@ This repository is the official implementation of the paper: "CLM-Former for Enh
 1. Conceptual Framework
 The model follows a hierarchical processing strategy. The input is decomposed, and the seasonal component undergoes dual refinement: global patterns via Auto-Correlation and local patterns via CLM-subNet.
 
-2. Overall Architecture
+<img width="450" height="560" alt="image" src="https://github.com/user-attachments/assets/bb65ca4b-344d-41dd-9dff-801bf9e7cebc" />
+
+Figure 1: Conceptual overview of the CLM-Former architecture.
+
+
+3. Overall Architecture
 The detailed Encoder-Decoder structure showing the integration of CLM-subNet within the decomposition blocks.
 
 <img width="1035" height="326" alt="image" src="https://github.com/user-attachments/assets/c7083207-4694-47c9-b6d3-5a08ed0a4b53" />
