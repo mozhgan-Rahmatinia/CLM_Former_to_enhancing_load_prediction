@@ -158,7 +158,6 @@ Strong gains at longer horizons (336 steps)
 
 Improved accuracy without sacrificing inference speed
 
-![Forecast Comparison](figures/fig6_prediction_comparison.png)
 
 
 Qualitative comparison of CLM-Former against Transformer-based baselines.
