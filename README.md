@@ -1,90 +1,191 @@
-CLM-Former: 
-Enhancing Multi-Horizon Time Series Forecasting in Smart Microgrids
+# CLM-Former: Enhancing Multi-Horizon Load Forecasting in Smart Microgrids
 
-This repository is the official implementation of the paper: "CLM-Former for Enhancing Multi-Horizon Time Series Forecasting and Load Prediction in Smart Microgrids Using a Robust Transformer-Based Model".
+This repository provides the official implementation of the paper:
 
----------------------------------------------------------------------------------
+**CLM-Former for Enhancing Multi-Horizon Time Series Forecasting and Load Prediction in Smart Microgrids Using a Robust Transformer-Based Model**
 
-📜 Abstract
+📌 *Scientific Reports (Nature Portfolio) – Q1 Journal*  
+📌 *Open Access*
 
-Accurate multi-horizon load forecasting is essential for the stability and efficiency of smart grid operations. While Transformer-based models (e.g., Autoformer) excel at capturing long-term periodic trends, they often struggle with rapidly changing, localized patterns prevalent in residential data.
+---
 
-To address this, we propose CLM-Former, a novel hybrid architecture that integrates:
-1- Series Decomposition to separate trend and seasonal components.
-2- Auto-Correlation Mechanism for global periodic dependency discovery.
-3- CLM-subNet (CNN+LSTM): A specialized bottleneck subnetwork designed to capture high-frequency local variations and sequential dependencies .
+## 📄 Paper Information
 
-Experimental results on real-world datasets (Electricity, Traffic, ETT, Weather) demonstrate that CLM-Former consistently outperforms state-of-the-art baselines while maintaining high computational efficiency.
+- **Journal:** Scientific Reports (Nature)
+- **DOI:** https://doi.org/10.1038/s41598-025-34870-y
+- **Full Text (Open Access):**  
+  https://www.nature.com/articles/s41598-025-34870-y
+- **Authors:**  
+  - S. Mozhgan Rahmatinia  
+  - Seyed-Majid Hosseini  
+  - Seyed-Amin Hosseini-Seno  
 
----------------------------------------------------------------------------------
+---
 
-🚀 Key Features & Novelty
+## 🧠 Abstract
 
-- Hybrid "Divide and Conquer" Strategy: Simultaneously models global seasonality (via Autoformer backbone) and local dynamics (via CLM-subNet).
-- Parameter Efficiency: Utilizes a "bottleneck" LSTM design that reduces parameter count (33.96M) compared to the official Autoformer baseline (34.62M).
-- High Inference Speed: Achieves inference latency virtually identical to Autoformer (+1.4% avg), suitable for real-time smart grid deployment.
-- Faster Convergence: Demonstrates up to ~31.8% faster training convergence on complex long-horizon tasks.
+Accurate multi-horizon load forecasting is a cornerstone of efficient and reliable smart microgrid operation, particularly in residential environments characterized by strong seasonality and abrupt short-term fluctuations.
 
-CLM-Former: Enhancing Multi-Horizon Time Series Forecasting in Smart Microgrids
-This repository is the official implementation of the paper: "CLM-Former for Enhancing Multi-Horizon Time Series Forecasting and Load Prediction in Smart Microgrids Using a Robust Transformer-Based Model".
+To address the limitations of existing Transformer-based forecasting models, this work proposes **CLM-Former**, a novel hybrid deep learning architecture that enhances the Autoformer framework by integrating a **CNN–LSTM subnetwork (CLM-subNet)** directly into the decomposition-based Transformer blocks.
 
----------------------------------------------------------------------------------
+CLM-Former effectively captures:
+- Long-term periodic patterns via frequency-domain autocorrelation
+- Short-term and localized fluctuations via hierarchical time-domain modeling
 
-🏗️ Model Architecture
+Extensive experiments on real-world residential electricity consumption datasets demonstrate that CLM-Former consistently outperforms state-of-the-art Transformer-based and deep learning models across multiple forecasting horizons, while preserving computational efficiency.
 
-1. Conceptual Framework
-The model follows a hierarchical processing strategy. The input is decomposed, and the seasonal component undergoes dual refinement: global patterns via Auto-Correlation and local patterns via CLM-subNet.
+---
 
-<img width="450" height="560" alt="image" src="https://github.com/user-attachments/assets/bb65ca4b-344d-41dd-9dff-801bf9e7cebc" />
+## ✨ Key Contributions
 
-Figure 1: Conceptual overview of the CLM-Former architecture.
+- 🔹 **Architectural Innovation:**  
+  Replaces the point-wise Feed-Forward Network in Autoformer with a learnable **CNN–LSTM subnetwork** operating on the seasonal component.
+
+- 🔹 **Hybrid Temporal Modeling:**  
+  Combines frequency-domain autocorrelation (long-term periodicity) with time-domain convolutional and recurrent modeling (short-term dynamics).
+
+- 🔹 **Multi-Horizon Forecasting:**  
+  Accurate predictions for short-, medium-, and long-term horizons (96, 192, 336 steps).
+
+- 🔹 **Global Multivariate Forecasting:**  
+  A single model jointly forecasts electricity consumption for **321 residential households**.
+
+- 🔹 **Generalizability:**  
+  Validated on Electricity, Traffic, ETTm2, and Weather benchmark datasets.
+
+- 🔹 **Efficiency-Preserving Design:**  
+  Maintains Autoformer’s \(O(L \log L)\) complexity with minimal inference overhead.
+
+---
+
+## 🏗️ CLM-Former Architecture
+
+CLM-Former follows an **Encoder–Decoder Transformer architecture** with progressive time series decomposition.
+
+### 🔹 Core Components
+
+1. **Series Decomposition (Layer-wise)**  
+   Splits the input into:
+   - Seasonal component
+   - Cyclical–trend component
+
+2. **Autocorrelation-Based Attention**  
+   Captures long-range dependencies and dominant periodic patterns in the frequency domain.
+
+3. **CLM-subNet (CNN + LSTM)**  
+   Applied exclusively to the seasonal component to:
+   - Extract local high-frequency patterns (CNN)
+   - Model sequential temporal dependencies (LSTM)
+
+4. **Progressive Aggregation**  
+   Trend components are accumulated while refined seasonal signals generate multi-horizon forecasts.
+
+---
+
+## 🖼️ Model Overview
 
 
-3. Overall Architecture
-The detailed Encoder-Decoder structure showing the integration of CLM-subNet within the decomposition blocks.
-
-<img width="1035" height="326" alt="image" src="https://github.com/user-attachments/assets/c7083207-4694-47c9-b6d3-5a08ed0a4b53" />
-Figure 2: The overall architecture of CLM-Former, highlighting data flow for Trend (Dark Blue) and Seasonal (Purple) components.
+![CLM-Former Overview](figures/fig1_clmformer_overview.png)
 
 
+Conceptual overview of CLM-Former illustrating decomposition, autocorrelation, and CLM-subNet integration.
 
-4. CLM-subNet Internals
-The internal structure of the proposed subnetwork combining 1D-CNN layers for feature extraction and LSTM for sequential modeling.
-
-
-<img width="535" height="230" alt="image" src="https://github.com/user-attachments/assets/772a48ff-886c-4c07-895d-94aec5742df9" />
-
-Figure 3: The internal architecture of the proposed CLM-subNet.
-
----------------------------------------------------------------------------------
-
-📊 Results
-
-Performance Comparison (Electricity Dataset)
-CLM-Former achieves the lowest MSE and MAE across all prediction horizons (96, 192, 336), outperforming both Transformer-based and Deep Learning baselines.
-Impact of architectural components on forecasting accuracy (Ablation Study).
-
-Computational Efficiency
-Despite the addition of recurrent layers, the model maintains high efficiency. The figure below illustrates the favorable trade-off between Inference Time and Parameter Count.
-Computational efficiency analysis: Comparison of Inference Time vs. Parameters.
-
----------------------------------------------------------------------------------
-
-🔧 Getting Started
-
-Requirements
-
-The model was implemented using Python 3.11 and PyTorch 2.9.0. Install dependencies:
+![CLM-Former Architecture](figures/fig3_architecture.png)
 
 
-pip install -r requirements.txt
-Main dependencies: torch, numpy, pandas, matplotlib.
+Encoder–Decoder architecture with CLM-subNet replacing the Feed-Forward Network.
 
-Data Preparation
-The primary dataset used is the ElectricityLoadDiagrams20112014 from the UCI Machine Learning Repository.
+![CLM-subNet](figures/fig4_clm_subnet.png)
 
-Download the dataset.
-Place it in the ./data/electricity/ directory.
-The code automatically handles Z-score normalization and 70/10/20 train/val/test splitting.
+Internal structure of the proposed CNN–LSTM CLM-subNet.
 
+📊 Datasets
+Primary Dataset
+
+Electricity Dataset
+
+321 residential households
+
+Hourly resolution
+
+3 years (2016–2019)
+
+Additional Benchmarks
+
+Traffic
+
+ETTm2
+
+Weather
+
+Data Split:
+
+70% Training
+
+10% Validation
+
+20% Testing
+
+📈 Evaluation Metrics
+
+Mean Squared Error (MSE)
+
+Mean Absolute Error (MAE)
+
+Statistical significance validated via:
+
+Paired t-test
+
+Wilcoxon signed-rank test
+
+🧪 Experimental Results
+
+Consistent superiority over:
+
+Autoformer
+
+Crossformer
+
+Informer
+
+Reformer
+
+Transformer
+
+CNN-LSTM, LSTM, TCN, SCINet, TiDE
+
+Strong gains at longer horizons (336 steps)
+
+Improved accuracy without sacrificing inference speed
+
+![Forecast Comparison](figures/fig6_prediction_comparison.png)
+
+
+Qualitative comparison of CLM-Former against Transformer-based baselines.
+
+⚙️ Computational Efficiency
+
+Retains 
+𝑂
+(
+𝐿
+log
+⁡
+𝐿
+)
+complexity
+
+Comparable inference time to Autoformer
+
+Fewer parameters than convolution-only Autoformer variants due to LSTM bottleneck design
+
+🖥️ Environment
+
+Python 3.11
+
+PyTorch ≥ 2.2
+
+NumPy, Pandas
+
+GPU: NVIDIA RTX / T4 (tested)
 
